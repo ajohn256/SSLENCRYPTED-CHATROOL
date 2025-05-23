@@ -15,12 +15,12 @@ context = ssl.create_default_context()
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 
-IP = "206.189.128.208"
+IP = "server_ip"
 PORT = 443
 user = ''
 
 client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-client = context.wrap_socket(client,server_hostname="209.38.82.81")
+client = context.wrap_socket(client,server_hostname=IP)
 client.connect((IP,PORT))
 socket.timeout(5)
 print(f"[CONNECTED +] Connection Established!")
@@ -85,10 +85,8 @@ class HandleUserInteraction:
 	def receive_messages(self):
 		while True:
 			try:
-				# messages = client.recv(50048)
 				messages = self.recv_pickle()
 				if messages:
-					# messages = pickle.loads(messages)
 					print(f"{messages['user']}-# {messages['message']}")#
 
 				else:
@@ -110,10 +108,6 @@ class HandleUserInteraction:
 			try:
 				text2 = f"[{self.color}]{text}[/{self.color}] {tz}"
 				usr = f"[bright_red](User)-[/bright_red][{self.color2}]{user}[/{self.color2}]"
-				# client.send(pickle.dumps({
-				# 	"user":usr,
-				# 	"message":text2
-				# 	}))
 				self.send_pickle({
 					"user":usr,
 					"message":text2
@@ -123,11 +117,6 @@ class HandleUserInteraction:
 
 				if text == "bye":
 					usr = f"{user}"
-
-					# client.send(pickle.dumps({
-					# 	"user":usr,
-					# 	'message':text
-					# 	}))
 					self.send_pickle({
 						"user":usr,
 						'message':text
@@ -168,20 +157,12 @@ class HandleUserInteraction:
 					self.user = getpass.getuser()
 				self.passwd = input(f"Chatroom Password:")
 
-				# client.send(pickle.dumps({
-				# 	'user':self.user,
-				# 	'passwd':self.passwd
-				# 	}))
 				self.send_pickle({
 					'user':self.user,
 					'passwd':self.passwd
 					})
-				# print("sent login data")
 
-
-				# resp = pickle.loads(client.recv(5048))
 				resp = self.recv_pickle()
-				# print("received login data")
 
 				if resp['status'] == "200 OK":
 					print(resp['message'])

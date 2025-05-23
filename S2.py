@@ -52,7 +52,7 @@ class ChatServerSystem():
 
 
 	def broadcast_pickle(self,pickle_data):
-		length = struct.pack('!I', len(pickle_data))  # 4 bytes, big-endian
+		length = struct.pack('!I', len(pickle_data)) 
 		conn.sendall(length + pickle_data)
 
 	def send_pickle(self,conn, msg):
@@ -61,7 +61,7 @@ class ChatServerSystem():
 		else:
 			try:
 			    data = pickle.dumps(msg)
-			    length = struct.pack('!I', len(data))  # 4 bytes, big-endian
+			    length = struct.pack('!I', len(data)) 
 			    conn.sendall(length + data)
 
 			except Exception as e:
@@ -79,7 +79,6 @@ class ChatServerSystem():
 		    while len(length_data) < 4:
 		        more = conn.recv(4 - len(length_data))
 		        if not more:
-		            # raise EOFError("Connection closed before reading length")
 		            logging.error("Connection closed before reading length")
 		            return None
 
@@ -92,7 +91,6 @@ class ChatServerSystem():
 		        more = conn.recv(length - len(data))
 		        if not more:
 		            logging.error("Connection closed before receiving full data")
-		            # raise EOFError("Connection closed before receiving full data")
 		            return None
 
 		        data += more
@@ -107,7 +105,6 @@ class ChatServerSystem():
 	def send_messages(self,message):
 		try:
 			for user in self.users:
-				# user.send(message)
 				self.send_pickle(user,message)
 
 		except Exception as e:
