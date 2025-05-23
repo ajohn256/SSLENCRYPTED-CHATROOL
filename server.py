@@ -30,7 +30,7 @@ except Exception as e:
 	sys.exit()
 
 
-IP = "0.0.0.0"
+IP = "127.0.0.1"
 PORT = 443
 ADDR = (IP,PORT)
 
